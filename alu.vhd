@@ -1,4 +1,7 @@
 -- Jacob Murrah COMP-4300 Lab 2
+use work.dlx_types.all;
+use work.bv_arithmetic.all;
+
 entity alu is
     generic (prop_delay : time := 15 ns);
     port (
@@ -10,6 +13,8 @@ entity alu is
 end entity alu;
 
 architecture behavioral of alu is
+    constant ZEROS : dlx_word := (others => '0');
+    constant ONES  : dlx_word := (others => '1');
 begin
     aluProcess : process(operand1, operand2, operation) is
         variable bv_result   : dlx_word;
@@ -58,9 +63,9 @@ begin
                     error <= "0000" after prop_delay;
                 end if;
             when "0101" => -- two's comp divide
-                if operand2 = (others => '0') then
-                    result <= (others => '0') after prop_delay;
-                    error  <= "0010" after prop_delay;  -- divide by zero
+                if operand2 = ZEROS then
+                    result <= ZEROS after prop_delay;
+                    error  <= "0010" after prop_delay;
                 else
                     bv_div(operand1, operand2, bv_result, div_zero, ov_flag);
                     result <= bv_result after prop_delay;
@@ -77,10 +82,10 @@ begin
                 result <= operand1 or operand2 after prop_delay;
                 error  <= "0000" after prop_delay;
             when "1010" => -- logical not of operand1
-                if operand1 = (zeros => '0') then
-                    result <= (ones => '1') after prop_delay;
+                if operand1 = ZEROS then
+                    result <= ONES after prop_delay;
                 else
-                    result <= (zeros => '0') after prop_delay;
+                    result <= ZEROS after prop_delay;
                 end if;
                 error  <= "0000" after prop_delay;
             when "1011" => -- bitwise not of operand1
@@ -93,11 +98,13 @@ begin
                 result <= operand2 after prop_delay;
                 error  <= "0000" after prop_delay;
             when "1110" => -- pass all zeros
-                result <= (zeros => '0') after prop_delay;
+                result <= ZEROS after prop_delay;
                 error  <= "0000" after prop_delay;
             when "1111" => -- pass all ones
-                result <= (ones => '1') after prop_delay;
+                result <= ONES after prop_delay;
                 error  <= "0000" after prop_delay;
+            when others =>
+                null;
         end case;
     end process aluProcess;
 end architecture behavioral;

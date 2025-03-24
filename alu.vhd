@@ -5,7 +5,7 @@ entity alu is
         operand1, operand2: in dlx_word;
         operation: in alu_operation_code;
         result: out dlx_word;
-        error: out error_code;
+        error: out error_code
     );
 end entity alu;
 

@@ -12,30 +12,63 @@ end entity alu;
 architecture behavioral of alu is
 begin
     aluProcess : process(operand1, operand2, operation) is
+        variable bv_result   : dlx_word;
+        variable ov_flag     : boolean;
+        variable div_zero    : boolean;
     begin
         case operation is
             when "0000" => -- unsigned add
-                result <= bv_addu(operand1, operand2) after prop_delay;
-                error  <= "0000" after prop_delay;
+                bv_addu(operand1, operand2, bv_result, ov_flag);
+                result <= bv_result after prop_delay;
+                if ov_flag then
+                    error <= "0001" after prop_delay;
+                else
+                    error <= "0000" after prop_delay;
+                end if;
             when "0001" => -- unsigned subtract
-                result <= bv_subu(operand1, operand2) after prop_delay;
-                error  <= "0000" after prop_delay;
+                bv_subu(operand1, operand2, bv_result, ov_flag);
+                result <= bv_result after prop_delay;
+                if ov_flag then
+                    error <= "0001" after prop_delay;
+                else
+                    error <= "0000" after prop_delay;
+                end if;
             when "0010" => -- two's comp add
-                result <= bv_add(operand1, operand2) after prop_delay;
-                error  <= "0000" after prop_delay;
+                bv_add(operand1, operand2, bv_result, ov_flag);
+                result <= bv_result after prop_delay;
+                if ov_flag then
+                    error <= "0001" after prop_delay;
+                else
+                    error <= "0000" after prop_delay;
+                end if;
             when "0011" => -- two's comp subtract
-                result <= bv_sub(operand1, operand2) after prop_delay;
-                error  <= "0000" after prop_delay;
+                bv_sub(operand1, operand2, bv_result, ov_flag);
+                result <= bv_result after prop_delay;
+                if ov_flag then
+                    error <= "0001" after prop_delay;
+                else
+                    error <= "0000" after prop_delay;
+                end if;
             when "0100" => -- two's comp multiply
-                result <= bv_mult(operand1, operand2) after prop_delay;
-                error  <= "0000" after prop_delay;
+                bv_mult(operand1, operand2, bv_result, ov_flag);
+                result <= bv_result after prop_delay;
+                if ov_flag then
+                    error <= "0001" after prop_delay;
+                else
+                    error <= "0000" after prop_delay;
+                end if;
             when "0101" => -- two's comp divide
                 if operand2 = (others => '0') then
                     result <= (others => '0') after prop_delay;
-                    error  <= "0010" after prop_delay;  -- divide by zero error
+                    error  <= "0010" after prop_delay;  -- divide by zero
                 else
-                    result <= bv_div(operand1, operand2) after prop_delay;
-                    error  <= "0000" after prop_delay;
+                    bv_div(operand1, operand2, bv_result, div_zero, ov_flag);
+                    result <= bv_result after prop_delay;
+                    if ov_flag then
+                        error <= "0001" after prop_delay;
+                    else
+                        error <= "0000" after prop_delay;
+                    end if;
                 end if;
             when "0111" => -- bitwise and
                 result <= operand1 and operand2 after prop_delay;

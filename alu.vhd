@@ -3,23 +3,27 @@ use work.dlx_types.all;
 use work.bv_arithmetic.all;
 
 entity alu is
-    generic (prop_delay : time := 15 ns);
+    generic (
+        prop_delay : time := 15 ns
+    );
     port (
-        operand1, operand2: in dlx_word;
-        operation: in alu_operation_code;
-        result: out dlx_word;
-        error: out error_code
+        operand1, operand2 : in  dlx_word;
+        operation        : in  alu_operation_code;
+        result           : out dlx_word;
+        error            : out error_code
     );
 end entity alu;
 
 architecture behavioral of alu is
     constant ZEROS : dlx_word := (others => '0');
     constant ONES  : dlx_word := (others => '1');
+    signal ov_flag_signal   : boolean;
+    signal div_zero_signal  : boolean;
 begin
     aluProcess : process(operand1, operand2, operation) is
-        variable bv_result   : dlx_word;
-        variable ov_flag     : boolean;
-        variable div_zero    : boolean;
+        variable bv_result : dlx_word;
+        variable ov_flag   : boolean;
+        variable div_zero  : boolean;
     begin
         case operation is
             when "0000" => -- unsigned add
@@ -104,7 +108,10 @@ begin
                 result <= ONES after prop_delay;
                 error  <= "0000" after prop_delay;
             when others =>
-                null;
+                result <= ZEROS after prop_delay;
+                error  <= "0000" after prop_delay;
         end case;
+        ov_flag_signal <= ov_flag;
+        div_zero_signal <= div_zero;
     end process aluProcess;
 end architecture behavioral;

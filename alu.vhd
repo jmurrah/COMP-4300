@@ -25,6 +25,7 @@ begin
         variable ov_flag   : boolean;
         variable div_zero  : boolean;
     begin
+        div_zero_signal <= false;
         case operation is
             when "0000" => -- unsigned add
                 bv_addu(operand1, operand2, bv_result, ov_flag);
@@ -67,17 +68,15 @@ begin
                     error <= "0000" after prop_delay;
                 end if;
             when "0101" => -- two's comp divide
-                if operand2 = ZEROS then
-                    result <= ZEROS after prop_delay;
-                    error  <= "0010" after prop_delay;
+                bv_div(operand1, operand2, bv_result, div_zero, ov_flag);
+                result <= bv_result after prop_delay;
+                if (div_zero = true) then
+                    error <= "0010" after prop_delay;
+                    div_zero_signal <= div_zero;
+                elsif (ov_flag = true) then
+                    error <= "0001" after prop_delay;
                 else
-                    bv_div(operand1, operand2, bv_result, div_zero, ov_flag);
-                    result <= bv_result after prop_delay;
-                    if ov_flag then
-                        error <= "0001" after prop_delay;
-                    else
-                        error <= "0000" after prop_delay;
-                    end if;
+                    error <= "0000" after prop_delay;
                 end if;
             when "0111" => -- bitwise and
                 result <= operand1 and operand2 after prop_delay;
@@ -112,6 +111,5 @@ begin
                 error  <= "0000" after prop_delay;
         end case;
         ov_flag_signal <= ov_flag;
-        div_zero_signal <= div_zero;
     end process aluProcess;
 end architecture behavioral;

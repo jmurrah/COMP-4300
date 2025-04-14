@@ -14,7 +14,7 @@ entity reg_file is
     );
 end entity reg_file;
 
-architecture behavioral of reg_file is
+architecture behavior of reg_file is
     type reg_type is array (0 to 31) of dlx_word;
 begin
     regFileProcess : process(data_in, readnotwrite, clock, reg_number) is
@@ -28,5 +28,5 @@ begin
             end if;
 	end if;
     end process regFileProcess;
-end architecture behavioral;
+end architecture behavior;
 

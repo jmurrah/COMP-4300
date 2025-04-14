@@ -10,7 +10,7 @@ entity twobitdecoder is
     );
 end twobitdecoder;
 
-architecture behavioral of twobitdecoder is
+architecture behavior of twobitdecoder is
 begin
     decoderProcess : process(encoded) is
     begin
@@ -31,4 +31,4 @@ begin
             out3 <= '1' after prop_delay;
         end if;
     end process decoderProcess;
-end architecture behavioral;
+end architecture behavior;

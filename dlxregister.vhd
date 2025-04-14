@@ -13,7 +13,7 @@ entity dlx_register is
     );
 end entity dlx_register;
 
-architecture behavioral of dlx_register is
+architecture behavior of dlx_register is
 begin
     dlxRegisterProcess : process(in_val, clock) is
     begin
@@ -21,4 +21,4 @@ begin
             out_val <= in_val after prop_delay;
         end if;
     end process dlxRegisterProcess;
-end architecture behavioral;
+end architecture behavior;

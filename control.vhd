@@ -61,6 +61,7 @@ begin
                 when 2 =>
                     -- State 2: Decide instruction
                     if opcode(7 downto 4) = "0000" then -- ALU op; go to state 3.
+                        alu_func <= opcode(3 downto 0) after prop_delay;
                         state := 3;
                     elsif opcode = X"20" then -- STO; go to state 9.
                         state := 9;
@@ -236,7 +237,6 @@ begin
                     mem_readnotwrite <= '0' after prop_delay;
 
                     regfile_clk <= '1' after prop_delay;
-                    pc_clk <= '1' after prop_delay;
                     mem_clk <= '1' after prop_delay;
 
                     pc_mux <= '0' after prop_delay;
@@ -252,7 +252,7 @@ begin
                     state := 17;
 
                 when 17 =>
-                    -- JMP/JZ: Mem[PC] -> Addr, Regs[IR[op1]] -> Ctl (JZ only); go to state 18.
+                    -- JMP/JZ: Mem[PC] -> Addr; for JZ also read Regs[IR[op1]] to check if zero
                     memaddr_mux <= "00" after prop_delay;
                     mem_readnotwrite <= '1' after prop_delay;
                     addr_mux <= '1' after prop_delay;
@@ -261,10 +261,18 @@ begin
                     addr_clk <= '1' after prop_delay;
 
                     if opcode = x"41" then -- JZ
-                        state := 20;
-                    else
-                        state := 18;
+                        regfile_index <= operand1 after prop_delay;
+                        regfile_readnotwrite <= '1' after prop_delay;
+                        regfile_clk <= '1' after prop_delay;
+
+                        op1_clk <= '1' after prop_delay;
+                        op2_clk <= '1' after prop_delay;
+                        
+                        alu_func <= "0111" after prop_delay;
+                        result_clk <= '1' after prop_delay;
                     end if;
+
+                    state := 18;
 
                 when 18 =>
                     -- JMP/JZ: For JMP, Addr -> PC; for JZ, if alu_out = 0 then Addr -> PC else PC+1; go to state 1.
@@ -284,19 +292,6 @@ begin
                     pc_clk <= '1' after prop_delay;
 
                     state := 1;
-
-                when 20 =>
-                    -- JMP/JZ: Regs[IR[op1]] -> Ctl (JZ only); go to state 18
-                    regfile_index <= operand1 after prop_delay;
-                    regfile_readnotwrite <= '1' after prop_delay;
-                    memaddr_mux <= "10" after prop_delay;  -- "10" selects regfile output
-                    mem_readnotwrite <= '0' after prop_delay;
-                    
-                    regfile_clk <= '1' after prop_delay;
-                    pc_clk <= '1' after prop_delay;
-                    mem_clk <= '1' after prop_delay;
-
-                    state := 18;
 
                 when others =>
                     null;

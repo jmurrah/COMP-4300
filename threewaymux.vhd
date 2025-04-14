@@ -13,7 +13,7 @@ entity threeway_mux is
     );
 end entity threeway_mux;
 
-architecture behavioral of threeway_mux is
+architecture behavior of threeway_mux is
 begin
     threewayMuxProcess : process(input_2, input_1, input_0, which) is
     begin
@@ -25,5 +25,5 @@ begin
 	    output <= input_0 after prop_delay;
 	end if;
     end process threewayMuxProcess;
-end architecture behavioral;
+end architecture behavior;
 

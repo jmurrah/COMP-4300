@@ -1,3 +1,4 @@
+-- Jacob Murrah COMP-4300 Lab 4
 use work.bv_arithmetic.all;
 use work.dlx_types.all;
 
@@ -311,4 +312,3 @@ begin
         end if;
     end process behav;
 end behavior;
-

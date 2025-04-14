@@ -14,7 +14,7 @@ entity alu is
     );
 end entity alu;
 
-architecture behavioral of alu is
+architecture behavior of alu is
     constant ZEROS : dlx_word := (others => '0');
     constant ONES  : dlx_word := (others => '1');
     signal ov_flag_signal   : boolean;
@@ -112,4 +112,4 @@ begin
         end case;
         ov_flag_signal <= ov_flag;
     end process aluProcess;
-end architecture behavioral;
+end architecture behavior;

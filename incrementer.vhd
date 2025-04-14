@@ -13,7 +13,7 @@ entity pcplusone is
     );
 end entity pcplusone;
 
-architecture behavioral of pcplusone is
+architecture behavior of pcplusone is
     constant ZEROS : dlx_word := (others => '0');
 begin
     pcPlusOneProcess : process(input, clock) is
@@ -29,5 +29,5 @@ begin
 	    end if;
 	end if;
     end process pcPlusOneProcess;
-end architecture behavioral;
+end architecture behavior;
 

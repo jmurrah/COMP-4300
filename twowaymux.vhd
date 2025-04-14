@@ -13,7 +13,7 @@ entity mux is
     );
 end entity mux;
 
-architecture behavioral of mux is
+architecture behavior of mux is
 begin
     muxProcess : process(input_1, input_0, which) is
     begin
@@ -23,5 +23,5 @@ begin
 	    output <= input_0 after prop_delay;
 	end if;
     end process muxProcess;
-end architecture behavioral;
+end architecture behavior;
 

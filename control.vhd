@@ -149,16 +149,6 @@ begin
                         imm_clk <= '1' after prop_delay;
                     end if;
 
-		    if opcode = x"30" then -- LD
-                        memaddr_mux <= "01" after prop_delay;
-                        mem_readnotwrite <= '1' after prop_delay;
-                        regfilein_mux <= "01" after prop_delay;
-                        mem_clk <= '1' after prop_delay;
-                    else -- LDI
-                        regfilein_mux <= "10" after prop_delay;
-                        imm_clk <= '1' after prop_delay;
-                    end if;
-
                     regfile_index <= destination after prop_delay;
                     regfile_readnotwrite <= '0' after prop_delay;
 

@@ -309,42 +309,13 @@ begin
         type memtype is array (0 to 1024) of dlx_word;
         variable data_memory : memtype;
     begin
-	data_memory(0) :=  X"30200000"; -- LD R4, 256
-        data_memory(1) :=  X"00000100"; -- address 0x100
+	data_memory(0) :=  X"30200000"; --LD R4, 0x100
+	data_memory(1) :=  X"00000100"; -- address 0x100 for previous instruction
+	data_memory(2) :=  "00000000000110000100010000000000"; -- ADDU R3,R1,R2
 
-        data_memory(2) :=  X"30080000"; -- LD R1, 257
-        data_memory(3) :=  X"00000101"; -- address 0x101
-
-        data_memory(4) :=  X"30100000"; -- LD R2, 258
-        data_memory(5) :=  X"00000102"; -- address 0x102
-
-        data_memory(6) :=  "00000000000110000100010000000000"; -- ADDU R3, R1, R2
-
-        data_memory(7) :=  "00100000000000001100000000000000"; -- STO R3, 0x103
-        data_memory(8) :=  x"00000103"; -- address 0x103
-        
-        data_memory(9) :=  "00110001000000000000000000000000"; -- LDI R0, 0x104
-        data_memory(10) := x"00000104"; -- 0x104
-
-        data_memory(11) := "00100010000000001100000000000000"; -- STOR (R0), R3
-        
-        data_memory(12) := "00110010001010000000000000000000"; -- LDR R5, (R0)
-        
-        data_memory(13) := x"40000000"; -- JMP to 261
-        data_memory(14) := x"00000105";
-
-        data_memory(256) := "01010101000000001111111100000000"; -- 256
-        data_memory(257) := "00000001000000010000000100000001"; -- 257
-        data_memory(258) := "00010000000100000001000000010000"; -- 258
-        
-        data_memory(261) :=  x"00584400"; -- ADDU R11, R1, R2
-        
-        data_memory(262) := x"4101C000"; -- JZ R7, 267 If R7 == 0, GOTO Addr 267
-        data_memory(263) := x"0000010B";
-
-        data_memory(267) := x"00604400"; -- ADDU R12, R1, R2
-        
-        data_memory(268) := x"10000000"; -- NOOP
+	data_memory(256) := "01010101000000001111111100000000";
+	data_memory(257) := "10101010000000001111111100000000";
+	data_memory(258) := "00000000000000000000000000000001";
 
 	if clock = '1' then
             if readnotwrite = '1' then

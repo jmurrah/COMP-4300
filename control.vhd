@@ -179,7 +179,7 @@ begin
 
                 when 11 =>
                     -- STO: Regs[IR[src]] -> Mem[Addr], PC+1 -> PC; go to state 1.
-                    memaddr_mux <= "10" after prop_delay;
+                    memaddr_mux <= "00" after prop_delay;
                     regfile_index <= operand1 after prop_delay;
                     regfile_readnotwrite <= '1' after prop_delay;
                     regfile_clk <= '1' after prop_delay;
@@ -312,3 +312,4 @@ begin
         end if;
     end process behav;
 end behavior;
+

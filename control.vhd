@@ -62,7 +62,6 @@ begin
                 when 2 =>
                     -- State 2: Decide instruction
                     if opcode(7 downto 4) = "0000" then -- ALU op; go to state 3.
-                        alu_func <= opcode(3 downto 0) after prop_delay;
                         state := 3;
                     elsif opcode = X"20" then -- STO; go to state 9.
                         state := 9;
@@ -102,6 +101,7 @@ begin
 
                 when 5 =>
                     -- State 5: ALUout -> Result; go to state 6.
+		    alu_func <= opcode(3 downto 0) after prop_delay;
                     result_clk <= '1' after prop_delay;
 
                     state := 6;
@@ -152,10 +152,10 @@ begin
                     regfile_index <= destination after prop_delay;
                     regfile_readnotwrite <= '0' after prop_delay;
 
-                    regfile_clk <= '1' after prop_delay;
+                    regfile_clk <= '1' after prop_delay * 3;
 
-                    pc_mux <= '0' after prop_delay;
-                    pc_clk <= '1' after prop_delay;
+                    pc_mux <= '0' after prop_delay * 3;
+                    pc_clk <= '0' after prop_delay, '1' after prop_delay * 3;
 
                     state := 1;
 
@@ -179,7 +179,7 @@ begin
 
                 when 11 =>
                     -- STO: Regs[IR[src]] -> Mem[Addr], PC+1 -> PC; go to state 1.
-                    memaddr_mux <= "10" after prop_delay;
+                    memaddr_mux <= "00" after prop_delay;
                     regfile_index <= operand1 after prop_delay;
                     regfile_readnotwrite <= '1' after prop_delay;
                     regfile_clk <= '1' after prop_delay;

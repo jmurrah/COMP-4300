@@ -309,13 +309,12 @@ begin
         type memtype is array (0 to 1024) of dlx_word;
         variable data_memory : memtype;
     begin
-	data_memory(0) :=  X"30200000"; --LD R4, 256
+	data_memory(0) :=  X"30200000"; -- LD R4, 256
         data_memory(1) :=  X"00000100"; -- address 0x100
 
         data_memory(2) :=  X"30080000"; -- LD R1, 257
         data_memory(3) :=  X"00000101"; -- address 0x101
 
-        
         data_memory(4) :=  X"30100000"; -- LD R2, 258
         data_memory(5) :=  X"00000102"; -- address 0x102
 
@@ -335,8 +334,8 @@ begin
         data_memory(14) := x"00000105";
 
         data_memory(256) := "01010101000000001111111100000000"; -- 256
-        data_memory(257) := "10101010000000001111111100000000"; -- 257
-        data_memory(258) := "00000000000000000000000000000001"; -- 258
+        data_memory(257) := "00000001000000010000000100000001"; -- 257
+        data_memory(258) := "00010000000100000001000000010000"; -- 258
         
         data_memory(261) :=  x"00584400"; -- ADDU R11, R1, R2
         
